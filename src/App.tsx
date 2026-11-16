@@ -9,12 +9,14 @@ import { SettingsPage } from "./pages/SettingsPage";
 import { LessonPage } from "./pages/LessonPage";
 import { DrillPage, dueDrillKeys } from "./pages/DrillPage";
 import { ExamPage, ExamsPage } from "./pages/ExamPage";
+import { SheetsPage } from "./pages/SheetsPage";
 
 const NAV = [
   { path: "", label: "Course" },
   { path: "review", label: "Review" },
   { path: "exams", label: "Past exams" },
   { path: "playground", label: "Playground" },
+  { path: "sheets", label: "Unassessed sheets" },
   { path: "reference", label: "Functions" },
   { path: "settings", label: "Settings" },
 ];
@@ -43,13 +45,15 @@ export function App() {
   else if (page === "playground") content = <PlaygroundPage ghcUp={!!ghc} />;
   else if (page === "reference") content = <ReferencePage query={rest[0]} />;
   else if (page === "settings") content = <SettingsPage />;
+  else if (page === "sheets") content = <SheetsPage />;
   else content = <PathPage />;
 
   const active = page === "exam" ? "exams" : page ?? "";
   const wide = page === "exam";
+  const sheets = page === "sheets";
 
   return (
-    <div className={`shell ${wide ? "shell-wide" : ""}`}>
+    <div className={`shell ${wide ? "shell-wide" : ""} ${sheets ? "shell-sheets" : ""}`}>
       <aside className="sidebar">
         <a className="brand" href="#/">
           <span className="brand-name">Haskell Prep</span>
@@ -75,12 +79,12 @@ export function App() {
         </div>
       </aside>
       <main className="main">
-        {ghc === undefined && (
+        {ghc === undefined && !sheets && (
           <div className="banner" role="status">
             Starting Haskell in this tab…
           </div>
         )}
-        {ghc === null && (
+        {ghc === null && !sheets && (
           <div className="banner" role="status">
             Couldn't start the in-browser Haskell compiler. Retry, or run <code className="code">npm run dev</code> for full GHCi.
             <button

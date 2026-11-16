@@ -20,7 +20,7 @@
     try {
       await boot;
       if (!hs) throw new Error("Haskell runtime failed to start");
-      const r = await hs.run({ code: data.code, timeout: data.timeout ?? 20_000 });
+      const r = await hs.run({ code: data.code, stdin: data.stdin, timeout: data.timeout ?? 20_000 });
       if (r.exitCode === 124) {
         hs.dispose();
         hs = await BrowserHaskell.createHaskell({ baseUrl: CDN, timeout: 20_000 });
